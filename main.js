@@ -12,7 +12,10 @@ const dict = require('./dictionary');
 const settings = require('./settings').settings;
 
 // Setup connection to Database
-mongoose.connect('mongodb://localhost/busterbot');
+
+setTimeout(function() { 
+mongoose.connect('mongodb://mongo:27017/busterbot');
+; }, 5000);
 
 // Setting bot
 const bot = new TelegramBot(settings.token, {polling: true});

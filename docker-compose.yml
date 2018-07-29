@@ -5,9 +5,11 @@ services:
     restart: always
     build: .
     ports:
-      - "3000:3000"
+      - "8080:8080"
     links:
       - mongo
+    environment:
+      - BOT_TOKEN=$BOT_TOKEN
   mongo:
     container_name: mongo
     image: mongo
