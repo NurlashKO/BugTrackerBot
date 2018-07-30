@@ -1,16 +1,34 @@
-#CatbusterBot
+# CatbusterBot
 
-Для того чтобы можно с ним работать нужно:
+This bot initially created by @daniqq, to remind about meeting. After while @simb4 suggested to upgrade this bug tracking feature.
 
-- NodeJS
-- MongoDB
+### Prerequisites
 
-После клонирования проекта в папке нужно набрать
+These things you need to be installed.
 
-    npm install
+```
+NodeJS
+MongoDB
+```
 
-Для запуска:
+### Installing
 
-    node main.js
+After clonning project you need to run this command. 
 
-В файле `settings.js` на настройке devSettings можно поставить свои токен и имя пользователя, который сгенерит вам *BotFather*
+```
+npm install
+```
+
+To run 
+
+```
+node main.js
+```
+
+### Additional notes
+
+In file `settings.js` on `devSettings` you can paste your token and username which *BotFather* generate.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
