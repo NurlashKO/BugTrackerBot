@@ -69,39 +69,6 @@ let Project = mongoose.model('Project', ProjectSchema);
 let Bug = mongoose.model('Bug', BugSchema);
 
 // Methods
-const addOrActivateUser = async(telegramUser) => {
-    try {
-        let user = await User.findOne({id: telegramUser.id});
-
-        if (!user) {
-            user = new User({
-                id: telegramUser.id,
-                first_name: telegramUser.first_name,
-                last_name: telegramUser.last_name,
-                username: telegramUser.username,
-                is_active: true,
-                chat_id: 0
-            });
-        } else {
-            user.is_active = true;
-            user.username = telegramUser.username;
-        }
-        await user.save();
-    } catch (err) {
-        console.error(err);
-    }
-};
-const disableUser = async(telegramUser) => {
-    try {
-        let user = await User.findOne({id: telegramUser.id});
-        if (user) {
-            user.is_active = false;
-            await user.save()
-        }
-    } catch (err) {
-        console.error(err);
-    }
-};
 const createOrUpdateChat = async(chatId, chatTitle) => {
     try {
         let chat = await Chat.findOne({});
@@ -302,8 +269,6 @@ module.exports.User = User;
 module.exports.Chat = Chat;
 module.exports.Bug = Bug;
 module.exports.BugStatusEnum = BugStatusEnum;
-module.exports.addOrActivateUser = addOrActivateUser;
-module.exports.disableUser = disableUser;
 module.exports.createOrUpdateChat = createOrUpdateChat;
 module.exports.activatePersonalChat = activatePersonalChat;
 module.exports.addProject = addProject;

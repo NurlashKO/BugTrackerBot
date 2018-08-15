@@ -36,11 +36,6 @@ bot.on('new_chat_members', (msg) => {
     CatbusterMain.newChatMembers(msg, sendMessage);
 });
 
-// This will be called when member of chat is left
-bot.on('left_chat_member', (msg) => {
-    CatbusterMain.leftChatMember(msg);
-});
-
 // Entered command
 bot.onText(/\/[A-Z]/gi, (msg, match) => {
     let handled =
@@ -77,6 +72,7 @@ bot.on('message', (msg) => {
     }
     CatbusterProject.replyToMessage(msg, sendMessage);
     CatbusterBug.replyToMessage(msg, sendMessage);
+    CatbusterMain.replyToMessage(msg, sendMessage);
 });
 
 
