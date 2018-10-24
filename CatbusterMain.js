@@ -1,32 +1,21 @@
 const dict = require('./dictionary');
-const addOrActivateUser = require('./db').addOrActivateUser;
-const disableUser = require('./db').disableUser;
 const createOrUpdateChat = require('./db').createOrUpdateChat;
 const activatePersonalChat = require('./db').activatePersonalChat;
 const botUsername = require('./settings').settings.botUserName;
+const authorization = require('./settings').authorization;
 
 const mostUsedOptions = {
     reply_markup: {
         keyboard : [
-            ["/projects", "/bugs", "/add_bug", "/stat"],
+            ["/projects", "/bugs", "/add_bug"],
         ],
         resize_keyboard: true,
     }
 };
 
 const handleCommand = (msg, command, callback) => {
-    if (command.input.indexOf('/hello') !== -1) {
-        addOrActivateUser(msg.from);
-        callback(msg.chat.id, dict.hello(msg.from), mostUsedOptions);
-        return true;
-    }
     if (command.input.indexOf('/hi') !== -1) {
-        addOrActivateUser(msg.from);
-        callback(msg.chat.id, dict.hello(msg.from), mostUsedOptions);
-        return true;
-    }
-    if (command.input.indexOf('/greet') !== -1) {
-        callback(msg.chat.id, dict.greetings(botUsername), {});
+        newPersonalChatMember(msg, callback);
         return true;
     }
     if (command.input.indexOf('/start') !== -1) {
@@ -63,24 +52,46 @@ const newChatMembers = (msg, callback) => {
 };
 
 /**
- * This method will deactivate users that left chat
- * @param msg
- */
-const leftChatMember = (msg) => {
-    disableUser(msg.left_chat_member);
-};
-
-/**
  * This method will assign personal chat with bot and user
  * @param msg
  * @param callback
  */
 const newPersonalChatMember = (msg, callback) => {
+    if (authorization.isRequired) {
+        callback(msg.chat.id, dict.promptAuthPassword(authorization.passwordHint), {
+            'reply_markup': {
+                'force_reply': true,
+            }
+        });
+        return
+    }
     activatePersonalChat(msg.from, msg.chat.id);
     callback(msg.chat.id, dict.hello(msg.from), mostUsedOptions);
 };
 
+/**
+ * Perform actions if replied message is connected with project main actions.
+ * @param msg
+ * @param callback
+ * @returns {boolean} whether the reply was made or not.
+ */
+const replyToMessage = (msg, callback) => {
+  const handleAuthorization = async() => {
+      if (msg.text === authorization.password) {
+          activatePersonalChat(msg.from, msg.chat.id);
+          callback(msg.chat.id, dict.hello(msg.from), mostUsedOptions);
+      } else {
+          callback(msg.chat.id, 'Wrong password :(', {})
+      }
+  };
+  if (dict.promptAuthPassword(authorization.passwordHint) === msg.reply_to_message.text) {
+    handleAuthorization();
+    return true;
+  }
+  return false;
+};
+
 module.exports.newChatMembers = newChatMembers;
-module.exports.leftChatMember = leftChatMember;
 module.exports.newPersonalChatMember = newPersonalChatMember;
 module.exports.handleCommand = handleCommand;
+module.exports.replyToMessage = replyToMessage;

@@ -1,3 +1,9 @@
+const authorization = {
+  isRequired: false,
+  passwordHint: '',
+  password: '',
+};
+
 /**
  * These are development settings. You should write your own bots token and its username
  * @type {{token: string, botName: string}}
@@ -8,4 +14,11 @@ const prod_settings = {
     botUserName: 'codebusters_tester_nurlashko_bot',
 };
 
+const dev_settings = {
+  token: '',
+  botUserName: '',
+};
+
+// Replace this line with your dev settings.
 module.exports.settings = prod_settings;
+module.exports.authorization = authorization;

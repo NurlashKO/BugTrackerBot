@@ -46,12 +46,10 @@ const showRegisteredProjects = (msg, callback) => {
  * @returns {boolean} whether the reply was made or not.
  */
 const replyToMessage = (msg, callback) => {
-
     const handleRegistration = async() => {
         addProject(msg.text);
         callback(msg.chat.id, 'Проект был успешно добавлен!\nНе забудьте выбрать его командой /projects.', {})
     };
-
     if (dict.askProvideProjectName() === msg.reply_to_message.text) {
         handleRegistration();
         return true;
